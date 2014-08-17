@@ -1,26 +1,222 @@
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingWorker;
+import javax.swing.colorchooser.*;
+public class VamixGUI extends JFrame{
+   
+    JLabel jlStatus;
+    Long startTime;
+    SwingWorker<Double, Double> SW;
+    
+    
 
-public class VamixGUI {
+    public VamixGUI() {
+    	
+        setLayout(new FlowLayout());
+        setSize(375, 150);
+       
+        jlStatus = new JLabel("What task would you like to complete?");
+
+        JButton jbDownload = new JButton("Download");
+        JButton jbExtract = new JButton("Extract");
+        JButton jbLog = new JButton("Log");
+        JTextField jText = new JTextField("Output will be displayed here.",30); 
+        jText.setEditable(false);
+        
+        final JButton jbSettings = new JButton("Settings");
+       
+
+        jbDownload.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	//String inputURL = JOptionPane.showInputDialog("Please input a URL to download");
+            	JTextField urlInput = new JTextField();
+            	JTextField outFile = new JTextField();
+            	JCheckBox trueCheck = new JCheckBox("Open Source", false);
+            	DownloadSwingWorker sw = new DownloadSwingWorker();
+            sw.execute();
+            	Object[] message = {
+            	    "Enter URL:", urlInput,
+            	    "Enter name of output file:", outFile,
+            	    trueCheck,
+            	};
+
+            	int option = JOptionPane.showConfirmDialog(null, message, "Please input the URL you wish to download", JOptionPane.OK_CANCEL_OPTION);
+            	if (option == JOptionPane.OK_OPTION) {
+            		String downloadURL = urlInput.getText();
+            		String outputName = outFile.getText();
+            	    if (urlInput.getText().equals("h") && outFile.getText().equals("h")) {
+            	        System.out.println("Login successful");
+            	    } else {
+            	        System.out.println("login failed");
+            	    }
+            	} else {
+            	    System.out.println("Login canceled");
+            	}
+            	//SW.execute();
+            }
+        });
+
+        
+        jbLog.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	
+            	try
+            	{
+            	Process proc=Runtime.getRuntime().exec("echo 'hello'");
+            	BufferedReader read=new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+            	while(read.ready())
+            	{
+            	System.out.println(read.readLine());
+            	}
+            	}
+            	catch(IOException m)
+            	{
+            	System.out.println(m.getMessage());
+            	}
+            	
+               // startTime = Calendar.getInstance().getTimeInMillis();
+               // jbDownload.setEnabled(false);
+               // jbExtract.setEnabled(true);
+              //  SW = new StopWatchSwingWorker();
+               // SW.execute();
+            }
+        });
+        
+ 
+        
+        jbExtract.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	//String inputURL = JOptionPane.showInputDialog("Please input a URL to download");
+            	JTextField urlInput = new JTextField();
+            	JTextField outFile = new JTextField();
+            	JTextField startTime = new JTextField();
+            	JTextField endTime = new JTextField();
+            	Object[] message = {
+            	    "Enter input name:", urlInput,
+            	   
+            	    "Enter name of output file:", outFile,
+            	    "Start Time:", startTime,
+            	    "End Time", endTime
+            	    
+            	};
+
+            	int option = JOptionPane.showConfirmDialog(null, message, "Please input the URL you wish to download", JOptionPane.OK_CANCEL_OPTION);
+            	if (option == JOptionPane.OK_OPTION) {
+            		String downloadURL = urlInput.getText();
+            		String outputName = outFile.getText();
+            	    if (urlInput.getText().equals("h") && outFile.getText().equals("h")) {
+            	        System.out.println("Login successful");
+            	    } else {
+            	        System.out.println("login failed");
+            	    }
+            	} else {
+            	    System.out.println("Login canceled");
+            	}
+            	//SW.execute();
+            }
+        });
 
 
-	public static void main(final String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new VamixGUI(args);
-			}
-		});
-	}
+        jbSettings.addActionListener(new ActionListener() {
 
-	private VamixGUI(String[] args) {
-		JFrame frame = new JFrame("vlcj Tutorial");
-		frame.setLocation(100, 100);
-		frame.setSize(1050, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
-	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            
+            	
+            	 Color backgroundColor = JColorChooser.showDialog(
+                         jbSettings, "Choose background color", Color.white);
+                      if(backgroundColor != null){
+                         setBackground(backgroundColor);
+                         getContentPane().setBackground(backgroundColor);
+                      }
+            }
+        });
+        add(jlStatus);
+        add(jbDownload);
+        add(jbExtract);
+        add(jbLog);
+        add(jbSettings);
+        add(jText);
+       
+      
+       
+
+    }
+
+    private class DownloadSwingWorker extends SwingWorker<Double, Double>{
+
+        @Override
+        protected Double doInBackground() throws Exception {
+           
+
+            while (true) {
+               	try
+            	{
+            	Process proc=Runtime.getRuntime().exec("echo 'hello'");
+            	BufferedReader read=new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+            	while(read.ready())
+            	{
+            	System.out.println(read.readLine());
+            	}
+            	}
+            	catch(IOException m)
+            	{
+            	System.out.println(m.getMessage());
+            	}
+               // tempTime = Calendar.getInstance().getTimeInMillis();
+               // Double elapsedTime = (double)(tempTime-startTime)/1000;
+              //  publish(elapsedTime);
+            }
+        }
+
+        @Override
+        protected void process(List<Double> chunks) {
+            if (isCancelled()) {
+                return;
+            }
+            jlStatus.setText("" + chunks.get(chunks.size()-1));
+        }
+
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+            	
+                JFrame guiFrame = new VamixGUI();     
+                guiFrame.setName("VAMIX");
+                guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                guiFrame.setVisible(true);
+            }
+        });
+    }
 }
-
